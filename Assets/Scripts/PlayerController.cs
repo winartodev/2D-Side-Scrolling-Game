@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    const string ground = "ground";
+    const string ground = "Ground";
+
+    [HideInInspector] public bool isHaveKey;
+    [HideInInspector] public int sumOfKeys;
+    public List<GameObject> Inventories;
 
     public float MoveSpeed;
     public float JumpForce;
+   
 
     float _inputHoizontal;
     float _inputVertical;
@@ -18,8 +23,10 @@ public class PlayerController : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+
         _isFlipRight = true;
         _isJumping = false;
+        isHaveKey = false;
 
         if (MoveSpeed == 0 || JumpForce == 0) {
             MoveSpeed = 2f;
@@ -66,13 +73,13 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == ground) {
+        if (collision.gameObject.CompareTag(ground)) {
             _isJumping = false;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision) {
-        if (collision.gameObject.tag == ground) {
+        if (collision.gameObject.CompareTag(ground)) {
             _isJumping = true;
         }
     }
