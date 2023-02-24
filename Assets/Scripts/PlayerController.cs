@@ -1,32 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour {
     const string ground = "Ground";
 
     [HideInInspector] public bool isHaveKey;
     [HideInInspector] public int sumOfKeys;
-    public List<GameObject> Inventories;
 
     public float MoveSpeed;
     public float JumpForce;
-   
 
     float _inputHoizontal;
     float _inputVertical;
     bool _isFlipRight;
     bool _isJumping;
 
+    public GameObject canvas;
+    public TextMeshProUGUI textMeshProUGUI;
+
     Rigidbody2D _rigidbody2D;
+    Inventory _inventory;
+    InventoryController _inventoryController;
 
     // Start is called before the first frame update
-    void Start() {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
-
+    void Awake() {
         _isFlipRight = true;
         _isJumping = false;
         isHaveKey = false;
+
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _inventoryController = GameObject.FindGameObjectWithTag("InventoryController").GetComponent<InventoryController>();
+
+        _inventory = new Inventory();
+        _inventoryController.SetInventory(_inventory);
 
         if (MoveSpeed == 0 || JumpForce == 0) {
             MoveSpeed = 2f;
@@ -70,6 +78,15 @@ public class PlayerController : MonoBehaviour {
 
         currentScale.x *= -1;
         transform.localScale = currentScale;
+    }
+
+    public void AddItem(GameObject item) {
+        if (_inventory.ItemList.Count < 20) {
+            if (item.TryGetComponent<ItemWorld>(out var itemWorld)) {
+                _inventory.AddItem(itemWorld.GetItem());
+                itemWorld.DestroySelf();
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {

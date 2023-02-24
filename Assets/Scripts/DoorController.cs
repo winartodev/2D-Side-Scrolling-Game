@@ -7,22 +7,24 @@ public class DoorController : MonoBehaviour {
     const string player = "Player";
     const string findKey = "To open the door find the key frist";
 
-    public TextMeshProUGUI textMeshProUGUI;
-    public GameObject Canvas;
-    public GameObject DoorLeaf;
-
     int _minKey = 3;
     bool _hitDoorByPlayer;
+
+    public GameObject DoorLeaf;
 
     PlayerController _playerController;
 
     private void Start() {
         _playerController = GameObject.FindGameObjectWithTag(player).GetComponent<PlayerController>();
         _hitDoorByPlayer = false;
-        Canvas.SetActive(false);
+        _playerController.canvas.SetActive(false);
     }
 
     private void Update() {
+        if (_playerController.sumOfKeys >= 3) {
+            _playerController.isHaveKey = true;
+        }
+
         if (_hitDoorByPlayer && Input.GetKey(KeyCode.E)) {
             Open(_playerController.isHaveKey, _playerController.sumOfKeys);
         }
@@ -35,41 +37,40 @@ public class DoorController : MonoBehaviour {
             DoorLeaf.SetActive(false);
         } else {
             if (sumOfKey == 0) {
-                textMeshProUGUI.SetText(findKey);
-                StartCoroutine(Deactivate(Canvas, 1.2f));
+                _playerController.textMeshProUGUI.SetText(findKey);
+                StartCoroutine(Deactivate(_playerController.canvas, 1.2f));
             } else {
-                textMeshProUGUI.SetText("find the key again <b>" + (_minKey - sumOfKey) + "</b> key left");
-                StartCoroutine(Deactivate(Canvas, 1.2f));
+                _playerController.textMeshProUGUI.SetText("find the key again <b>" + (_minKey - sumOfKey) + "</b> key left");
+                StartCoroutine(Deactivate(_playerController.canvas, 1.2f));
             }
-           
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag(player)) {
             _hitDoorByPlayer = true;
-            textMeshProUGUI.SetText("Press <b>E</b> to open the door");
-            Canvas.SetActive(true);
+            _playerController.textMeshProUGUI.SetText("Press <b>E</b> to open the door");
+            _playerController.canvas.SetActive(true);
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision) {
         if (collision.gameObject.CompareTag(player)) {
             _hitDoorByPlayer = false;
-            StartCoroutine(Deactivate(Canvas, 0.7f));
+            StartCoroutine(Deactivate(_playerController.canvas, 0.7f));
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
         if (collision.gameObject.CompareTag(player)) {
-            textMeshProUGUI.SetText("Press <b>E</b> to the next level");
-            Canvas.SetActive(true);
+            _playerController.textMeshProUGUI.SetText("Press <b>E</b> to the next level");
+            _playerController.canvas.SetActive(true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.CompareTag(player)) {
-            StartCoroutine(Deactivate(Canvas, 0.7f));
+            StartCoroutine(Deactivate(_playerController.canvas, 0.7f));
         }
     }
 
