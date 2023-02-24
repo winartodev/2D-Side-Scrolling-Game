@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Box
   - InventoryController
+  - ScoreUI
   layers:
   - Default
   - TransparentFX
