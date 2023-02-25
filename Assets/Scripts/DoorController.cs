@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class DoorController : MonoBehaviour {
@@ -9,6 +10,7 @@ public class DoorController : MonoBehaviour {
 
     int _minKey = 3;
     bool _hitDoorByPlayer;
+    bool _gameCompleted;
 
     public GameObject DoorLeaf;
 
@@ -27,6 +29,10 @@ public class DoorController : MonoBehaviour {
 
         if (_hitDoorByPlayer && Input.GetKey(KeyCode.E)) {
             Open(_playerController.isHaveKey, _playerController.sumOfKeys);
+        }
+
+        if (_gameCompleted && Input.GetKeyDown(KeyCode.E)) {
+            SceneManager.LoadScene(1);
         }
     }
 
@@ -63,6 +69,7 @@ public class DoorController : MonoBehaviour {
 
     private void OnTriggerStay2D(Collider2D collision) {
         if (collision.gameObject.CompareTag(player)) {
+            _gameCompleted = true;
             _playerController.textMeshProUGUI.SetText("Press <b>E</b> to the next level");
             _playerController.canvas.SetActive(true);
         }
