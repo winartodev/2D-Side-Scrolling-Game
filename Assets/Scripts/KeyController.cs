@@ -22,8 +22,9 @@ public class KeyController : MonoBehaviour {
     }
 
     public void CollectKey() {
-        _playerController.AddItem(gameObject);
+        _playerController.canvas.SetActive(false);
         _playerController.sumOfKeys += 1;
+        _playerController.AddItem(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -49,6 +50,7 @@ public class KeyController : MonoBehaviour {
 
     private IEnumerator Deactivate(GameObject gameObject, float delayTime) {
         yield return new WaitForSeconds(delayTime);
+        print("deactivate");
         gameObject.SetActive(false);
     }
 }
