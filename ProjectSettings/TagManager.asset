@@ -10,6 +10,7 @@ TagManager:
   - Box
   - InventoryController
   - ScoreUI
+  - DialougeController
   layers:
   - Default
   - TransparentFX
