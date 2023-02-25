@@ -1,5 +1,7 @@
 # 2D-Side-Scrolling-Game
 
+Using unity 2021.3.18f1 (ARM)
+
 ## Feature: 
 1. Character movement (W <jump>, A <move left>, D <move right>)
 2. Can Next Level (if already completed the keys (3 keys))
